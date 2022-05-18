@@ -1,6 +1,5 @@
  function Coins(){
-    return <h1>Coins</h1>
+    return <h1>Coin List</h1>
 }
-
 
 export default Coins
