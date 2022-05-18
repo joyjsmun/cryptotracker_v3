@@ -6,11 +6,12 @@ import styled from "styled-components"
 interface ICoins{
     name:string
     id:string
+    symbol:string
 }
 
 const Container = styled.div`
   padding: 0px 20px;
-  max-width: 480px;
+  max-width: 430px;
   margin: 0 auto;
 `
 const Header = styled.header`
@@ -45,6 +46,11 @@ const Coin = styled.li`
     }
 `
 
+const Symbol = styled.img`
+    width: 20px;
+    margin-right: 3px;
+`
+
  function Coins(){
      const [coins,setCoins] = useState<ICoins[]>([])
 
@@ -53,14 +59,16 @@ const Coin = styled.li`
         .then(response => response.json())
         .then(json => setCoins(json.slice(0,100)))
      })
+
+     console.log(coins)
      
     return (
     <Container>
         <Header>
-            <Title>Coin Tracker v3</Title>
+            <Title>Coin Tracker</Title>
         </Header>
         <CoinList>
-            {coins.map(coin => <Link to={`/${coin.id}`}><Coin>{coin.name} &rarr;</Coin></Link>)}
+            {coins.map(coin => <Link to={`/${coin.id}`}><Coin><Symbol src={`https://coinicons-api.vercel.app/api/icon/${coin?.symbol.toLowerCase()}`} />{coin.name} &rarr;</Coin></Link>)}
         </CoinList>
     </Container>
     )

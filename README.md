@@ -2,9 +2,10 @@
 
 - [x] Theme(Styled-components)
 - [x] Reset Css
-- [ ] Using Typescript
+- [x] Typescript
+- [x] Using Coin Symbols
 - [x] Routing(React-Router-Dom)
-- [ ] Fetching Data(React-Query)
+- [x] Fetching Data(React-Query)
 - [ ] Using Chart(ApexChart.js) 
 - [ ] Using React Helmet
 - [ ] ADD new UI
