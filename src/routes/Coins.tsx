@@ -16,7 +16,7 @@ const Container = styled.div`
 `
 const Header = styled.header`
     height: 100px;
-    color: #ffffcd;
+    color: ${props => props.theme.blockColor};
     font-weight: 700;
     display: flex;
     align-items: center;
@@ -31,10 +31,10 @@ const Title = styled.h1`
 const CoinList = styled.div``
 
 const Coin = styled.li`
-   color: #f65555;
+   color: ${props => props.theme.fontColor};
     list-style-type: none;
     height: 50px;
-    background-color: #ffffcd;
+    background-color: ${props => props.theme.blockColor};
     margin: 10px;
     display: flex;
     align-items: center;
@@ -68,7 +68,7 @@ const Symbol = styled.img`
             <Title>Coin Tracker</Title>
         </Header>
         <CoinList>
-            {coins.map(coin => <Link to={`/${coin.id}`}><Coin><Symbol src={`https://coinicons-api.vercel.app/api/icon/${coin?.symbol.toLowerCase()}`} />{coin.name} &rarr;</Coin></Link>)}
+            {coins.map(coin => <Link to={`/${coin.id}`} state={`${coin.name}`}><Coin><Symbol src={`https://coinicons-api.vercel.app/api/icon/${coin?.symbol.toLowerCase()}`} />{coin.name} &rarr;</Coin></Link>)}
         </CoinList>
     </Container>
     )
