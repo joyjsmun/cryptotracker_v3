@@ -1,5 +1,10 @@
- function Coin(){
-    return <h1>Coin</h1>
+import { useParams } from "react-router-dom"
+
+function Coin(){
+    const {coinId} = useParams()
+    
+    return <h1>{coinId ? coinId : "...Loading"}</h1>
 }
+
 
 export default Coin

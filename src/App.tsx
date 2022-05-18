@@ -39,6 +39,8 @@ footer, header, hgroup, main, menu, nav, section {
 }
 body {
 font-family: 'Source Sans Pro', sans-serif;
+background-color: ${props => props.theme.bgColor};
+color: ${props => props.theme.fontColor};
 }
 
 a{
@@ -63,14 +65,10 @@ table {
 
 `
 
-
-
-
 function App() {
   return (
       <>
       <GlobalStyle />
-      <h1>Coin Tracker</h1>
       <Router />
       </>
   );
