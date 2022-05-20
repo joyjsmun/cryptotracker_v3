@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { ReactQueryDevtools } from 'react-query/devtools'
 import { createGlobalStyle } from 'styled-components';
 import Router from './Router';
 
@@ -69,9 +70,9 @@ table {
 function App() {
   return (
       <>
-      
       <GlobalStyle />
       <Router />
+      <ReactQueryDevtools initialIsOpen={false} />
       </>
   );
 }

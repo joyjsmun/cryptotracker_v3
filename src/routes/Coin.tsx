@@ -1,13 +1,21 @@
 import { useEffect, useState } from "react"
+import { useQuery } from "react-query"
 import { Link } from "react-router-dom"
 import { useMatch } from "react-router-dom"
 import { Route, Routes, useLocation, useParams } from "react-router-dom"
 import styled from "styled-components"
+import { fetchInfo, fetchPrice } from "../api"
 import Chart from "./Chart"
 import Price from "./Price"
 
-interface RouteParams{
+
+interface RouteParam{
+    coinId:string
+}
+
+interface RouteState{
     state:string
+   
 }
 
 interface InfoData {
@@ -111,47 +119,35 @@ const Button = styled.button<{isActive:boolean}>`
 `
 
 function Coin(){
-    const [loading,setLoading] = useState(true)
-    const [info,setInfo] = useState<InfoData>()
-    const [price,setPrice] = useState<PriceData>()
-    const {coinId} = useParams()
-    const location = useLocation() as RouteParams
+    const {coinId} = useParams() 
+    const location = useLocation() as RouteState
     const chartMatch = useMatch("/:coinId/chart")
     const priceMatch = useMatch("/:coinId/price")
+    const {isLoading:infoLoading,data:coinInfo} = useQuery<InfoData>(["price",coinId],() => fetchInfo(coinId!))
+    const {isLoading:priceLoading,data:priceInfo} = useQuery<PriceData>(["tickers",coinId],()=> fetchPrice(coinId!))
 
-    useEffect(()=>{
-        fetch(`https://api.coinpaprika.com/v1/coins/${coinId}`)
-        .then(res => res.json())
-        .then(json => setInfo(json))
-        setLoading(false)
-    },[])
 
-    useEffect(()=> {
-        fetch(`https://api.coinpaprika.com/v1/tickers/${coinId}`)
-        .then(res => res.json())
-        .then(json => console.log(json))
-        setLoading(false)
-    },[])
-
+    const loading = infoLoading || priceLoading
+  
     return (
         <Container>
             <Header>
             <Title>
-             {location?.state ? location.state : loading ? "Loading..." : info?.name}
+             {location?.state ? location.state : loading ? "Loading..." : coinInfo?.name}
              </Title>
             </Header>
             {loading ? "loading..." : (
                 <>
                 <Detail>
                 <Block>
-                    <span><p>Rank</p><p>{info?.rank}</p></span>
-                    <span><p>Symbol</p><p>{info?.symbol}</p></span>
-                    <span><p>Open Source</p><p>{info?.open_source ? "Yes" : "No"}</p></span>
+                    <span><p>Rank</p><p>{coinInfo?.rank}</p></span>
+                    <span><p>Symbol</p><p>{coinInfo?.symbol}</p></span>
+                    <span><p>Open Source</p><p>{coinInfo?.open_source ? "Yes" : "No"}</p></span>
                 </Block>
-                <Info>{info?.description}</Info>
+                <Info>{coinInfo?.description}</Info>
                     <Block>
-                    <span><p>Total Supply</p><p>{price?.max_supply}</p></span>
-                    <span><p>Max Supply</p><p>{price?.total_supply}</p></span>
+                    <span><p>Total Supply</p><p>{priceInfo?.max_supply}</p></span>
+                    <span><p>Max Supply</p><p>{priceInfo?.total_supply}</p></span>
                 </Block>
             </Detail>
                 <Tab>
@@ -159,7 +155,7 @@ function Coin(){
                     <Link to={`/${coinId}/price`}><Button isActive={priceMatch !==null }>Price</Button></Link>
                 </Tab>
             <Routes>
-                <Route path="chart" element={<Chart/>}/>
+                <Route path="chart" element={<Chart coinId={coinId as string}/>}/>
                 <Route path="price" element={<Price />} />
             </Routes>
             </>

@@ -1,12 +1,18 @@
 import { useEffect, useState } from "react"
+import { useQuery } from "react-query"
 import { Link } from "react-router-dom"
 import styled from "styled-components"
+import { fetchCoins } from "../api"
 
 
 interface ICoins{
-    name:string
-    id:string
-    symbol:string
+    id: string;
+    name: string;
+    symbol: string;
+    rank: number;
+    is_new: boolean;
+    is_active: boolean;
+    type: string;
 }
 
 const Container = styled.div`
@@ -52,24 +58,18 @@ const Symbol = styled.img`
 `
 
  function Coins(){
-     const [coins,setCoins] = useState<ICoins[]>([])
+   const {isLoading,data} = useQuery<ICoins[]>("allCoins",fetchCoins)
 
-     useEffect(()=>{
-        fetch("https://api.coinpaprika.com/v1/coins")
-        .then(response => response.json())
-        .then(json => setCoins(json.slice(0,100)))
-     })
-
-     console.log(coins)
-     
     return (
     <Container>
         <Header>
             <Title>Coin Tracker</Title>
         </Header>
-        <CoinList>
-            {coins.map(coin => <Link to={`/${coin.id}`} state={`${coin.name}`}><Coin><Symbol src={`https://coinicons-api.vercel.app/api/icon/${coin?.symbol.toLowerCase()}`} />{coin.name} &rarr;</Coin></Link>)}
-        </CoinList>
+        {isLoading ? "...Loading" : 
+        (<CoinList>
+            {data?.slice(0,100).map((coin) => <Link to={`/${coin.id}`} state={`${coin.name}`}><Coin><Symbol src={`https://coinicons-api.vercel.app/api/icon/${coin?.symbol.toLowerCase()}`} />{coin.name} &rarr;</Coin></Link>)}
+    </CoinList>)
+        }
     </Container>
     )
 }
