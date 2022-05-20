@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { createGlobalStyle } from 'styled-components';
 import Router from './Router';
 
@@ -68,6 +69,7 @@ table {
 function App() {
   return (
       <>
+      
       <GlobalStyle />
       <Router />
       </>
