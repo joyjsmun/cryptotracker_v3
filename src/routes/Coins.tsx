@@ -1,7 +1,9 @@
 import { useQuery } from "react-query"
 import { Link } from "react-router-dom"
+import { useSetRecoilState } from "recoil"
 import styled from "styled-components"
 import { fetchCoins } from "../api"
+import { isDarkAtom } from "../atoms"
 
 
 
@@ -57,14 +59,28 @@ const Symbol = styled.img`
     margin-right: 3px;
 `
 
+const ButtonDiv = styled.div`
+    display: flex;
+    justify-content:center;
+`
+
+const Button = styled.div`
+    background: ${props => props.theme.accentColor};
+    padding: 10px;
+    border-radius: 15px;
+`
+
  function Coins(){
    const {isLoading,data} = useQuery<ICoins[]>("allCoins",fetchCoins)
+   const setDarkMode = useSetRecoilState(isDarkAtom)
+   const toggleMode = () => setDarkMode(prev =>!prev)
 
     return (
     <Container>
         <Header>
             <Title>Coin Tracker</Title>
         </Header>
+         <ButtonDiv><Button onClick={toggleMode}>Toggle Theme Mode &#8618;</Button></ButtonDiv>
         {isLoading ? "...Loading" : 
         (<CoinList>
             {data?.slice(0,100).map((coin) => <Link to={`/${coin.id}`} state={`${coin.name}`}><Coin><Symbol src={`https://coinicons-api.vercel.app/api/icon/${coin?.symbol.toLowerCase()}`} />{coin.name} &rarr;</Coin></Link>)}
