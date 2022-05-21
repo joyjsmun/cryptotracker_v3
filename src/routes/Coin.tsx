@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+
 import { useQuery } from "react-query"
 import { Link } from "react-router-dom"
 import { useMatch } from "react-router-dom"
@@ -124,7 +124,12 @@ function Coin(){
     const chartMatch = useMatch("/:coinId/chart")
     const priceMatch = useMatch("/:coinId/price")
     const {isLoading:infoLoading,data:coinInfo} = useQuery<InfoData>(["price",coinId],() => fetchInfo(coinId!))
-    const {isLoading:priceLoading,data:priceInfo} = useQuery<PriceData>(["tickers",coinId],()=> fetchPrice(coinId!))
+    const {isLoading:priceLoading,data:priceInfo} = useQuery<PriceData>(["tickers",coinId],()=> fetchPrice(coinId!),
+    
+    {
+        refetchInterval: 5000,
+      }
+    )
 
 
     const loading = infoLoading || priceLoading
@@ -142,7 +147,7 @@ function Coin(){
                 <Block>
                     <span><p>Rank</p><p>{coinInfo?.rank}</p></span>
                     <span><p>Symbol</p><p>{coinInfo?.symbol}</p></span>
-                    <span><p>Open Source</p><p>{coinInfo?.open_source ? "Yes" : "No"}</p></span>
+                    <span><p>Price</p><p>${priceInfo?.quotes.USD.price.toFixed(3)}</p></span>
                 </Block>
                 <Info>{coinInfo?.description}</Info>
                     <Block>

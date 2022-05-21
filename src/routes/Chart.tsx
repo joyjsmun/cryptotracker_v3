@@ -19,7 +19,11 @@ market_cap: number
 
 
 function Chart({coinId}:ChartProps){
-    const {isLoading,data} = useQuery<ChartData[]>(["ohlcv",coinId],()=> fetchChart(coinId))
+    const {isLoading,data} = useQuery<ChartData[]>(["ohlcv",coinId],()=> fetchChart(coinId),
+    {
+        refetchInterval: 10000,
+      }
+    )
 
     return (
         <div>
