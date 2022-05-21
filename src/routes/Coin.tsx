@@ -62,7 +62,7 @@ const Container = styled.div`
 `
 const Header = styled.header`
     height: 100px;
-    color: #fafab2;
+    color: ${props => props.theme.blockColor};
     font-weight: 700;
     display: flex;
     align-items: center;
